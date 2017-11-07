@@ -1,3 +1,95 @@
+Original
+//Generate a player board
+const generatePlayerBoard = (numberOfRows, numberOfColumns) => { 
+	let board = [];
+	for(let plRow = 0; plRow < numberOfRows; plRow++){
+		let row = [];
+		for(let plColumn = 0; plColumn < numberOfColumns; plColumn++){
+			row.push(' ');
+		}
+		board.push(row);
+	}
+	return board;
+};
+generatePlayerBoard(8, 8);
+
+
+//Generate a bom board
+const generateBombBoard = (numberOfRows, numberOfColumns, numberOfBombs) => {
+	let board = [];
+	for(let plRow = 0; plRow < numberOfRows; plRow++){
+		let row = [];
+		for(let plColumn = 0; plColumn < numberOfColumns; plColumn++){
+			row.push(null);
+		}
+		board.push(row);
+	}
+	let numberOfBombsPlaced = 0;
+	while(numberOfBombsPlaced < numberOfBombs){
+		//return numberOfBombs;
+		//The code in your while loop has the potential to place bombs on top of already existing bombs. This will be fixed when you learn about control flow
+	let randomRowIndex = Math.floor(Math.random() * numberOfRows);
+	let randomColumnIndex = Math.floor(Math.random() * numberOfColumns);
+
+	if(board[randomRowIndex][randomColumnIndex] !== 'B'){
+		board[randomRowIndex][randomColumnIndex] = 'B';
+		numberOfBombsPlaced++;
+	 }
+	}
+return board;
+};
+
+const getNumberOfNeighborBombs = (bombBoard, rowIndex, columnIndex) => {
+ 	const neighborOffsets = [ [-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1] ];
+ 	const numberOfRows = bombBoard.length;
+ 	const numberOfColumns = bombBoard[0].length;
+ 	const numberOfBombs = 0;
+
+ 	neighborOffsets.forEach(function(offset){
+ 		const neighborRowIndex = rowIndex + offset[0];
+ 		const neighborColumnIndex = columnIndex + offset[1];
+ 		//a revoir nested if
+ 		if(neighborRowIndex >= 0 && neighborRowIndex < numberOfRows && neighborColumnIndex >= 0 && neighborColumnIndex < numberOfColumns){
+ 			if(bombBoard[neighborRowIndex][neighborColumnIndex] === 'B'){
+ 				//numberOfBombs++;
+ 			}
+ 		}
+ 		
+ 	});
+ 	return numberOfBombs;
+ };
+
+ const flipTile = (playerBoard, bombBoard, rowIndex, columnIndex) => {
+ 	if(playerBoard[rowIndex][columnIndex] !== ' '){
+ 		console.log('This tile has already been flipped!');
+ 		return; //a revoir (27)
+ 	} else if(bombBoard[rowIndex][columnIndex] === 'B'){
+ 		playerBoard[rowIndex][columnIndex] = 'B';
+ 	}else{
+ 		playerBoard[rowIndex][columnIndex] = getNumberOfNeighborBombs(bombBoard, rowIndex, columnIndex);
+ 	}
+ };
+
+//Generate the board in the console
+const printBoard = (board) => {
+	console.log(board.map(row => row.join(' | ')).join('\n'));
+};
+
+playerBoard = generatePlayerBoard(2,3);
+console.log("playerboard looks like: ");
+printBoard(playerBoard);
+console.log('Updated Bomb Board: ');
+bombBoard = generateBombBoard(3,3,5);
+printBoard(bombBoard);
+
+flipTile(playerBoard, bombBoard, 0, 0);
+console.log('Updated Player Board: ');
+printBoard(playerBoard);
+
+
+
+// minesweeper step 6
+
 class Game{
 	constructor(numberOfRows, numberOfColumns, numberOfBombs){
 		this._board = new Board(numberOfRows, numberOfColumns, numberOfBombs);
@@ -51,8 +143,8 @@ class Board {
  	
 
 getNumberOfNeighborBombs(rowIndex, columnIndex) {
-		this._rowIndex = rowIndex;
-		this._columnIndex = columnIndex;
+		//this._rowIndex = rowIndex;
+		//this._columnIndex = columnIndex;
  	const neighborOffsets = [ [-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1] ];
  	const numberOfRows = this._bombBoard.length;
  	const numberOfColumns = this._bombBoard[0].length;
